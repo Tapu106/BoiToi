@@ -5,7 +5,6 @@ const { validationResult } = require("express-validator/check");
 exports.getAddproducts = (req, res, next) => {
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
-    user: req.user,
     editing: false,
     errorMessage: null,
     validationErrors: [],
@@ -80,7 +79,7 @@ exports.getEditProduct = (req, res, next) => {
       res.render("admin/edit-product", {
         pageTitle: "Edit Product",
         prods: product,
-        user: req.user,
+
         editing: editMode,
         validationErrors: [],
         errorMessage: null,
@@ -146,7 +145,6 @@ exports.getProduct = (req, res, next) => {
     .then((products) => {
       res.render("admin/products", {
         pageTitle: "Admin Products",
-        user: req.user,
         prods: products,
       });
     })

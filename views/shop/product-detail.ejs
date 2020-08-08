@@ -1,7 +1,10 @@
 <%- include('../includes/head.ejs') %>
 	<body>
 		<!-- HEADER -->
-		<%- include('../includes/header.ejs') %>
+		
+			<%- include('../includes/header.ejs') %>
+		
+	
 
 		<!-- NAVIGATION -->
 		<%- include('../includes/navigation.ejs') %>
@@ -106,7 +109,17 @@
 							</div>
 
 							<div class="add-to-cart">
-								<form action="" method="post">
+								<form action="/add-cart-with-quantity" method="post">
+									<input
+									type="hidden"
+									value="<%= prod._id %>"
+									name="productId"
+								  />
+								  <input
+									type="hidden"
+									name="_csrf"
+									value="<%= csrfToken %>"
+								  />
 								<div class="qty-label">
 									Qty
 									<div class="input-number">
@@ -115,7 +128,7 @@
 										<span class="qty-down">-</span>
 									</div>
 								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+								<button class="add-to-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i> add to cart</button>
 							</form>
 							</div>
 

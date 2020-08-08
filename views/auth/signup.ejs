@@ -1,6 +1,11 @@
 <%- include('../includes/head.ejs') %>
 
-<%- include('../includes/header.ejs') %>
+<%	if(isAuthenticated) {  %>
+  <%- include('../includes/header.ejs') %>
+
+<% } else	{  %>
+  <%- include('../includes/header.ejs', {cart: cart}) %>
+<%   }  %>
 
 
 </header>

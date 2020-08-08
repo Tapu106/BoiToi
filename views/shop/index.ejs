@@ -3,9 +3,11 @@
 	<body>
 		<!-- HEADER -->
 		<%- include('../includes/header.ejs') %>
+	
 
 		<!-- NAVIGATION -->
-		<%- include('../includes/navigation.ejs') %>
+			<%- include('../includes/navigation.ejs') %>
+
 
 		<!-- SECTION -->
 		<div class="section">
@@ -114,17 +116,15 @@
 														<i class="fa fa-star"></i>
 													</div>
 													<div class="product-btns">
-														<form action="" method="post"></form>
+														
 														<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
 														<!-- <button class="add-to-compare" onclick="location.href = '/edit'"><i class="fa fa-exchange"></i><span class="tooltipp">edit</span></button> -->
 														<button class="quick-view" onclick="location.href = '/products/<%= product._id %>'"><i class="fa fa-eye"></i><span class="tooltipp">view</span></button>
 													</div>
 												</div>
-											<!-- <div class="add-to-cart">
-												<form action="/cart" method="post">
-												<button class="add-to-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-											</form>
-											</div> -->
+											<div class="add-to-cart">
+												<%- include('../includes/add-to-cart.ejs',{product: product}) %>
+											</div>
 										</div>
 										<% } %>	
 										<!-- /product -->										

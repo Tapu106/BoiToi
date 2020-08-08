@@ -18,6 +18,12 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.getSignup = (req, res, next) => {
+  let cart;
+  if (!req.session.isLoggedIn) {
+    cart = null;
+  } else {
+    cart = req.user.cart;
+  }
   let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
@@ -27,6 +33,7 @@ exports.getSignup = (req, res, next) => {
   res.render("auth/signup", {
     pageTitle: "SignUp",
     errorMessage: message,
+    cart: cart,
     oldInput: {
       name: "",
       email: "",
@@ -45,10 +52,18 @@ exports.postSignUp = (req, res, next) => {
   const mobile = req.body.mobile;
   const errors = validationResult(req);
 
+  let cart;
+  if (!req.session.isLoggedIn) {
+    cart = null;
+  } else {
+    cart = req.user.cart;
+  }
+
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
       pageTitle: "SignUp",
       errorMessage: errors.array()[0].msg,
+      cart: cart,
       oldInput: {
         name: name,
         email: email,
@@ -95,6 +110,12 @@ exports.postSignUp = (req, res, next) => {
 };
 
 exports.getlogin = (req, res, next) => {
+  let cart;
+  if (!req.session.isLoggedIn) {
+    cart = null;
+  } else {
+    cart = req.user.cart;
+  }
   let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
@@ -104,6 +125,7 @@ exports.getlogin = (req, res, next) => {
   res.render("auth/login", {
     errorMessage: message,
     pageTitle: "Login",
+    cart: cart,
   });
 };
 
@@ -112,10 +134,18 @@ exports.postLogin = (req, res, next) => {
   const password = req.body.password;
   const errors = validationResult(req);
 
+  let cart;
+  if (!req.session.isLoggedIn) {
+    cart = null;
+  } else {
+    cart = req.user.cart;
+  }
+
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
       errorMessage: errors.array()[0].msg,
       pageTitle: "SignUp",
+      cart: cart,
       oldInput: {
         email: email,
         password: password,

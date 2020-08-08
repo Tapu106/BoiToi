@@ -92,43 +92,63 @@
               >
                 <i class="fa fa-shopping-cart"></i>
                 <span>Your Cart</span>
-                <div class="qty">3</div>
+                <% if(isAuthenticated) { %>
+                <div class="qty"><%= user.cart.items.length %></div>
+
+                <% } else { %>
+                <div class="qty">0</div>
+                <% } %>
               </a>
               <div class="cart-dropdown">
                 <div class="cart-list">
+                  <% if(isAuthenticated) { %> <%
+                  user.cart.items.forEach(function(arrayItem) { %>
                   <div class="product-widget">
-                    <div class="product-img">
+                    <!-- <div class="product-img">
                       <img src="./img/product01.png" alt="" />
-                    </div>
-                    <div class="product-body">
-                      <h3 class="product-name">
-                        <a href="#">product name goes here</a>
-                      </h3>
-                      <h4 class="product-price">
-                        <span class="qty">1x</span>$980.00
-                      </h4>
-                    </div>
-                    <button class="delete"><i class="fa fa-close"></i></button>
-                  </div>
+                    </div> -->
 
-                  <div class="product-widget">
-                    <div class="product-img">
-                      <img src="./img/product02.png" alt="" />
-                    </div>
                     <div class="product-body">
                       <h3 class="product-name">
-                        <a href="#">product name goes here</a>
+                        <a href="#"><%= arrayItem.productName %></a>
                       </h3>
                       <h4 class="product-price">
-                        <span class="qty">3x</span>$980.00
+                        <span class="qty"><%= arrayItem.quantity %>x</span><%=
+                        arrayItem.price %>TK
                       </h4>
                     </div>
-                    <button class="delete"><i class="fa fa-close"></i></button>
+                    <form action="/cart-delete-item" method="post">
+                      <input
+                        type="hidden"
+                        value="<%= arrayItem.productId._id %>"
+                        name="productId"
+                      />
+                      <input
+                        type="hidden"
+                        name="_csrf"
+                        value="<%= csrfToken %>"
+                      />
+                      <button class="delete">
+                        <i class="fa fa-close"></i>
+                      </button>
+                    </form>
                   </div>
+                  <% }) %> <% } %>
                 </div>
                 <div class="cart-summary">
-                  <small>3 Item(s) selected</small>
-                  <h5>SUBTOTAL: $2940.00</h5>
+                  <% if(isAuthenticated) { %>
+                    <% let sum = 0 %> 
+                   <% user.cart.items.forEach(function(items) { %>
+                    <%  sum += items.price;  %>
+                    <%  })  %>
+                  <small><%= user.cart.items.length %> Item(s) selected</small>
+
+                  <h5>SUBTOTAL: <%= sum %>TK</h5>
+
+                  <% } else{ %>
+                  <small><%= user.cart.items.length %> Item(s) selected</small>
+                  <h5>SUBTOTAL: sum</h5>
+                  <% } %>
                 </div>
                 <div class="cart-btns">
                   <a href="#">View Cart</a>
