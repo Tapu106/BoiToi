@@ -136,18 +136,16 @@
                   <% }) %> <% } %>
                 </div>
                 <div class="cart-summary">
-                  <% if(isAuthenticated) { %>
-                    <% let sum = 0 %> 
-                   <% user.cart.items.forEach(function(items) { %>
-                    <%  sum += items.price;  %>
-                    <%  })  %>
+                  <% if(isAuthenticated) { %> <% let sum = 0 %> <%
+                  user.cart.items.forEach(function(items) { %> <% sum +=
+                  items.price; %> <% }) %>
                   <small><%= user.cart.items.length %> Item(s) selected</small>
 
                   <h5>SUBTOTAL: <%= sum %>TK</h5>
 
                   <% } else{ %>
-                  <small><%= user.cart.items.length %> Item(s) selected</small>
-                  <h5>SUBTOTAL: sum</h5>
+                  <small>NO Item(s) selected</small>
+                  <h5>SUBTOTAL: 0</h5>
                   <% } %>
                 </div>
                 <div class="cart-btns">
