@@ -61,13 +61,8 @@
         <!-- SEARCH BAR -->
         <div class="col-md-6">
           <div class="header-search">
-            <form>
-              <select class="input-select">
-                <option value="0">All Categories</option>
-                <option value="1">Category 01</option>
-                <option value="1">Category 02</option>
-              </select>
-              <input class="input" placeholder="Search here" />
+            <form action="/search" method="GET">
+              <input class="input" placeholder="Search here" name="dsearch" />
               <button class="search-btn">Search</button>
             </form>
           </div>
@@ -154,7 +149,7 @@
                   <% } %>
                 </div>
                 <div class="cart-btns">
-                  <% if ( isAuthenticated && user.cart.items.length > 0   ) { %>
+                  <% if ( isAuthenticated && user.cart.items.length > 0 ) { %>
                   <a href="#">View Cart</a>
 
                   <a href="/checkout"

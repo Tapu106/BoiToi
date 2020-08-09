@@ -9,6 +9,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const User = require("./models/user");
 const multer = require("multer");
 const URI = "mongodb+srv://Tapu:logoutyear@cluster0-jnxxe.mongodb.net/boitoi";
+const Product = require("./models/product");
 
 const port = 8000;
 

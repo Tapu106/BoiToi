@@ -32,6 +32,29 @@ exports.getProduct = (req, res, next) => {
     });
 };
 
+exports.searchProduct = (req, res, next) => {
+  try {
+    Product.find({
+      $or: [
+        { category: { $regex: req.query.dsearch } },
+        { name: { $regex: req.query.dsearch } },
+      ],
+    })
+      .then((result) => {
+        console.log(result);
+        res.render("shop/search-result", {
+          pageTitle: "Search Results",
+          prods: result,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.getCart = (req, res, next) => {
   req.user
     .populate("cart.items.productId")

@@ -9,6 +9,8 @@ router.get("/", shopController.getIndex);
 
 router.get("/products/:productId", shopController.getProduct);
 
+router.get("/search", shopController.searchProduct);
+
 router.get("/cart", shopController.getCart);
 
 router.post("/cart", isAuth, shopController.postCart);
