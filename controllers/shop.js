@@ -33,9 +33,24 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render("shop/cart", {
-    pageTitle: "Cart",
-  });
+  req.user
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then((user) => {
+      const products = user.cart.items;
+      let total = 0;
+      products.forEach((p) => {
+        total += p.quantity * p.productId.price;
+      });
+      res.render("shop/cart", {
+        pageTitle: "Cart",
+        products: products,
+        sum: total,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postCart = (req, res, next) => {
