@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const helpCart = require("../utils/manageCart");
+const { checkout } = require("../routes/shop");
 
 exports.getIndex = (req, res, next) => {
   console.log(helpCart.cart);
@@ -29,6 +30,12 @@ exports.getProduct = (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
+};
+
+exports.getCart = (req, res, next) => {
+  res.render("shop/cart", {
+    pageTitle: "Cart",
+  });
 };
 
 exports.postCart = (req, res, next) => {
@@ -71,6 +78,27 @@ exports.deleteCartItem = (req, res, next) => {
     .removeItemFromCart(prodId)
     .then((result) => {
       res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.getCheckout = (req, res, next) => {
+  req.user
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then((user) => {
+      const products = user.cart.items;
+      let total = 0;
+      products.forEach((p) => {
+        total += p.quantity * p.productId.price;
+      });
+      res.render("shop/checkout", {
+        pageTitle: "checkout",
+        product: products,
+        sum: total,
+      });
     })
     .catch((err) => {
       console.log(err);

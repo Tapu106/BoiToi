@@ -1,5 +1,10 @@
 <!-- HEADER -->
-
+<style>
+  .cart-btns a.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+</style>
 <header>
   <!-- TOP HEADER -->
   <div id="top-header">
@@ -149,10 +154,21 @@
                   <% } %>
                 </div>
                 <div class="cart-btns">
+                  <% if ( isAuthenticated && user.cart.items.length > 0   ) { %>
                   <a href="#">View Cart</a>
-                  <a href="#"
+
+                  <a href="/checkout"
                     >Checkout <i class="fa fa-arrow-circle-right"></i
                   ></a>
+
+                  <% } else { %>
+
+                  <a href="#" class="disabled">No Cart</a>
+
+                  <a href="/checkout" class="disabled"
+                    >NO Checkout <i class="fa fa-arrow-circle-right"></i
+                  ></a>
+                  <% } %>
                 </div>
               </div>
             </div>
