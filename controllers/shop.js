@@ -84,7 +84,7 @@ exports.postCart = (req, res, next) => {
     })
     .then((result) => {
       console.log(result);
-      res.redirect("/");
+      res.redirect("/cart");
     })
     .catch((err) => {
       console.log(err);
@@ -101,7 +101,7 @@ exports.postCartWithQty = (req, res, next) => {
     })
     .then((result) => {
       console.log(result);
-      res.redirect("/");
+      res.redirect("/cart");
     })
     .catch((err) => {
       console.log(err);
@@ -114,7 +114,7 @@ exports.deleteCartItem = (req, res, next) => {
   req.user
     .removeItemFromCart(prodId)
     .then((result) => {
-      res.redirect("/");
+      res.redirect("/cart");
     })
     .catch((err) => {
       console.log(err);
@@ -136,6 +136,32 @@ exports.getCheckout = (req, res, next) => {
         product: products,
         sum: total,
       });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.postWishlist = (req, res, next) => {
+  const prodId = req.body.productId;
+
+  Product.findById(prodId)
+    .then((product) => {
+      return req.user.addToWishlist(product);
+    })
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => {});
+};
+
+exports.removeFromWhislist = (req, res, next) => {
+  const prodId = req.body.productId;
+
+  req.user
+    .removeFromWishlist(prodId)
+    .then((result) => {
+      res.redirect("/");
     })
     .catch((err) => {
       console.log(err);

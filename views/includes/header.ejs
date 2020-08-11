@@ -3,7 +3,7 @@
   .cart-btns a.disabled {
     pointer-events: none;
     cursor: default;
-    background-color: #b2beb5 ;
+    background-color: #b2beb5;
   }
 
   .cart-btns a:hover {
@@ -67,7 +67,7 @@
         <div class="col-md-6">
           <div class="header-search">
             <form action="/search" method="GET">
-              <input class="input" placeholder="Search here" name="q" />
+              <input class="input" placeholder="Search Anythin!!!" name="q" />
               <button class="search-btn">Search</button>
             </form>
           </div>
@@ -88,7 +88,7 @@
                 <i class="fa fa-heart-o"></i>
                 <span>Your Wishlist</span>
                 <% if(isAuthenticated) { %>
-                <div class="qty"><%= user.cart.items.length %></div>
+                <div class="qty"><%= user.whishList.items.length %></div>
 
                 <% } else { %>
                 <div class="qty">0</div>
@@ -97,7 +97,7 @@
               <div class="cart-dropdown">
                 <div class="cart-list">
                   <% if(isAuthenticated) { %> <%
-                  user.cart.items.forEach(function(arrayItem) { %>
+                  user.whishList.items.forEach(function(arrayItem) { %>
                   <div class="product-widget">
                     <!-- <div class="product-img">
                       <img src="./img/product01.png" alt="" />
@@ -108,8 +108,7 @@
                         <a href="#"><%= arrayItem.productName %></a>
                       </h3>
                       <h4 class="product-price">
-                        <span class="qty"><%= arrayItem.quantity %>x</span><%=
-                        arrayItem.price %>TK
+                        <span class="qty"></span><%= arrayItem.price %>TK
                       </h4>
                     </div>
                     <form action="/cart-delete-item" method="post">
@@ -128,7 +127,9 @@
                       </button>
                     </form>
                   </div>
-                  <% }) %> <% } %>
+                  <% }) %> 
+                  
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -162,7 +163,9 @@
 
                     <div class="product-body">
                       <h3 class="product-name">
-                        <a href="/products/<%= arrayItem.productId %>"><%= arrayItem.productName %></a>
+                        <a href="/products/<%= arrayItem.productId %>"
+                          ><%= arrayItem.productName %></a
+                        >
                       </h3>
                       <h4 class="product-price">
                         <span class="qty"><%= arrayItem.quantity %>x</span><%=

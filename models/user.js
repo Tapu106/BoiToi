@@ -44,6 +44,30 @@ const userSchema = new Schema({
       },
     ],
   },
+
+  whishList: {
+    items: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        productName: {
+          type: String,
+          required: true,
+        },
+        isWishListed: {
+          type: Boolean,
+          default: false,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
 });
 
 userSchema.methods.addToCart = function (product) {
@@ -112,6 +136,33 @@ userSchema.methods.removeItemFromCart = function (productId) {
     return item.productId.toString() !== productId.toString();
   });
   this.cart.items = updatedCartItems;
+  return this.save();
+};
+
+userSchema.methods.addToWishlist = function (product) {
+  const updatedItems = [...this.whishList.items];
+
+  updatedItems.push({
+    productId: product._id,
+    productName: product.name,
+    isWishListed: true,
+    price: product.price,
+  });
+
+  const updatedWishlist = {
+    items: updatedItems,
+  };
+  this.whishList = updatedWishlist;
+
+  return this.save();
+};
+
+userSchema.methods.removeFromWishlist = function (productId) {
+  const updatedCartItems = this.whishList.items.filter((item) => {
+    return item.productId.toString() !== productId.toString();
+  });
+
+  this.whishList.items = updatedCartItems;
   return this.save();
 };
 

@@ -116,9 +116,30 @@
 														<i class="fa fa-star"></i>
 													</div>
 													<div class="product-btns">
+														<% let found = false %>	
+														<%  if(isAuthenticated) {  %>
+
+														<% user.whishList.items.forEach(function(item) { %> 
+
+															<% if( item.productId.toString() === product._id.toString() ) {  %>
 														
-														<button class="add-to-wishlist" style="color: red;"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
-														<!-- <button class="add-to-compare" onclick="location.href = '/edit'"><i class="fa fa-exchange"></i><span class="tooltipp">edit</span></button> -->
+																<% found = true %>
+														<%	}  %>
+
+													<%	})  %>
+
+															<% if (found) { %>
+																<%- include('../includes/remove-from-wishlist.ejs',{product: product}) %>
+
+																<% } else { %>
+																	<%- include('../includes/add-to-wishlist.ejs',{product: product}) %>
+														<% } %>
+														<% } else { %>
+															<%- include('../includes/add-to-wishlist.ejs',{product: product}) %>
+														<% } %>	
+
+												
+ 														
 														<button class="quick-view" onclick="location.href = '/products/<%= product._id %>'"><i class="fa fa-eye"></i><span class="tooltipp">view</span></button>
 													</div>
 												</div>

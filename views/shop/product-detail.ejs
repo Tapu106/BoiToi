@@ -134,8 +134,29 @@
 
 							<ul class="product-btns">
 								<input type="hidden" value="<%= prod._id %>" name="productId">
-                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-								<li><a style="color: rgb(248, 91, 91);" href="#"><i class="fa fa-heart"></i> add to wishlist</a></li>
+								<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+								
+								<li><% let found = false %>	
+									<%  if(isAuthenticated) {  %>
+
+									<% user.whishList.items.forEach(function(item) { %> 
+
+										<% if( item.productId.toString() === prod._id.toString() ) {  %>
+									
+											<% found = true %>
+									<%	}  %>
+
+								<%	})  %>
+
+										<% if (found) { %>
+											<%- include('../includes/remove-from-wishlist.ejs',{product: prod}) %>
+
+											<% } else { %>
+												<%- include('../includes/add-to-wishlist.ejs',{product: prod}) %>
+									<% } %>
+									<% } else { %>
+										<%- include('../includes/add-to-wishlist.ejs',{product: prod}) %>
+									<% } %>	</li>
 								<li><a href="/admin/edit-product/<%= prod._id %>?edit=true"><i class="fa fa-exchange"></i> edit</a></li>
 							</ul>
 
