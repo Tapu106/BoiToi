@@ -22,6 +22,7 @@
                         <div id="tab1" class="tab-pane active">
                             <div class="products-slick" data-nav="#slick-nav-1">
                                 <!-- product -->
+                                <% if(prods.length > 0) { %>
                                 <% for( let product of prods) { %>
                                     <section style="padding-left: 15px;">
                                         <div class="product">
@@ -59,8 +60,14 @@
                                             </div>
                                         </div>
                                     </section>
+                                    <% } %>
                                
-                                <% } %>	
+                                <% } else { %>
+                                    
+                                    <!-- <div style="width: 500px; "> -->
+                                        <h3>No Products Found!</h3>
+                                    <!-- </div> -->
+                                    <% } %>
                                 <!-- /product -->										
                             </div>
                             <div id="slick-nav-1" class="products-slick-nav"></div>

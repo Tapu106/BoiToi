@@ -1,11 +1,8 @@
 <%- include('../includes/head.ejs') %>
 
-<%	if(isAuthenticated) {  %>
+
   <%- include('../includes/header.ejs') %>
 
-<% } else	{  %>
-  <%- include('../includes/header.ejs', {cart: cart}) %>
-<%   }  %>
 
 
 </header>
@@ -84,18 +81,19 @@ button:hover {
 .user-message {
   margin: auto;
   width: 90%;
-  border: 1px solid #4771fa;
+  border: 3px solid red;
   padding: 0.5rem;
   border-radius: 3px;
   background: #b9c9ff;
   text-align: center;
   color: white;
-}
+  
 
+}
 .user-message--error {
   border-color: red;
   background: rgb(255, 176, 176);
-  color: red;
+  color: white;
 }
 
 

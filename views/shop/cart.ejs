@@ -29,7 +29,7 @@
     margin: 0;
   }
 
-  .btn {
+  .btn2 {
     display: inline-block;
     padding: 0.25rem 1rem;
     text-decoration: none;
@@ -46,10 +46,15 @@
     text-decoration: none;
     font: inherit;
     border: 1px solid #690009;
-    color: #b91919;
+    color: #fff;
     background: white;
     border-radius: 3px;
     cursor: pointer;
+  }
+
+  .btn1:hover{
+      color: white;
+      background: red;
   }
 </style>
 
@@ -74,7 +79,7 @@
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" class="btn">Order Now!</button>
             </form>-->
-    <button type="button" class="btn">
+    <button type="button" class="btn2">
       <a class="" href="/checkout">Order Now!</a>
     </button>
   </div>

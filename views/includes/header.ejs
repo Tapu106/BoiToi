@@ -3,6 +3,11 @@
   .cart-btns a.disabled {
     pointer-events: none;
     cursor: default;
+    background-color: #b2beb5 ;
+  }
+
+  .cart-btns a:hover {
+    color: darkcyan;
   }
 </style>
 <header>
@@ -62,7 +67,7 @@
         <div class="col-md-6">
           <div class="header-search">
             <form action="/search" method="GET">
-              <input class="input" placeholder="Search here" name="dsearch" />
+              <input class="input" placeholder="Search here" name="q" />
               <button class="search-btn">Search</button>
             </form>
           </div>
@@ -73,16 +78,6 @@
         <div class="col-md-3 clearfix">
           <div class="header-ctn">
             <!-- Wishlist -->
-            <div>
-              <a href="#">
-                <i class="fa fa-heart-o"></i>
-                <span>Your Wishlist</span>
-                <div class="qty">2</div>
-              </a>
-            </div>
-            <!-- /Wishlist -->
-
-            <!-- Cart -->
             <div class="dropdown">
               <a
                 href="#"
@@ -90,8 +85,8 @@
                 data-toggle="dropdown"
                 aria-expanded="true"
               >
-                <i class="fa fa-shopping-cart"></i>
-                <span>Your Cart</span>
+                <i class="fa fa-heart-o"></i>
+                <span>Your Wishlist</span>
                 <% if(isAuthenticated) { %>
                 <div class="qty"><%= user.cart.items.length %></div>
 
@@ -135,22 +130,79 @@
                   </div>
                   <% }) %> <% } %>
                 </div>
+              </div>
+            </div>
+            <!-- /Wishlist -->
+
+            <!-- Cart -->
+            <div class="dropdown">
+              <a
+                href="#"
+                class="dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="true"
+              >
+                <i class="fa fa-shopping-cart"></i>
+                <span>Your Cart</span>
+                <% if(isAuthenticated) { %>
+                <div class="qty"><%= user.cart.items.length %></div>
+
+                <% } else { %>
+                <div class="qty">0</div>
+                <% } %>
+              </a>
+              <div class="cart-dropdown">
+                <div class="cart-list">
+                  <% if(isAuthenticated) { %> <%
+                  user.cart.items.forEach(function(arrayItem) { %>
+                  <div class="product-widget">
+                    <!-- <div class="product-img">
+                      <img src="./img/product01.png" alt="" />
+                    </div> -->
+
+                    <div class="product-body">
+                      <h3 class="product-name">
+                        <a href="/products/<%= arrayItem.productId %>"><%= arrayItem.productName %></a>
+                      </h3>
+                      <h4 class="product-price">
+                        <span class="qty"><%= arrayItem.quantity %>x</span><%=
+                        arrayItem.price %>TK
+                      </h4>
+                    </div>
+                    <form action="/cart-delete-item" method="post">
+                      <input
+                        type="hidden"
+                        value="<%= arrayItem.productId._id %>"
+                        name="productId"
+                      />
+                      <input
+                        type="hidden"
+                        name="_csrf"
+                        value="<%= csrfToken %>"
+                      />
+                      <button class="delete">
+                        <i class="fa fa-close"></i>
+                      </button>
+                    </form>
+                  </div>
+                  <% }) %> <% } %>
+                </div>
                 <div class="cart-summary">
                   <% if(isAuthenticated) { %> <% let sum = 0 %> <%
                   user.cart.items.forEach(function(items) { %> <% sum +=
                   items.price; %> <% }) %>
                   <small><%= user.cart.items.length %> Item(s) selected</small>
 
-                  <h5>SUBTOTAL: <%= sum %>TK</h5>
+                  <h5>TOTAL: <%= sum %>TK</h5>
 
                   <% } else{ %>
                   <small>NO Item(s) selected</small>
-                  <h5>SUBTOTAL: 0</h5>
+                  <h5>TOTAL: 0</h5>
                   <% } %>
                 </div>
                 <div class="cart-btns">
                   <% if ( isAuthenticated && user.cart.items.length > 0 ) { %>
-                  <a href="#">View Cart</a>
+                  <a href="/cart">View Cart</a>
 
                   <a href="/checkout"
                     >Checkout <i class="fa fa-arrow-circle-right"></i
@@ -158,10 +210,10 @@
 
                   <% } else { %>
 
-                  <a href="#" class="disabled">No Cart</a>
+                  <a href="#" class="disabled">Cart</a>
 
                   <a href="/checkout" class="disabled"
-                    >NO Checkout <i class="fa fa-arrow-circle-right"></i
+                    >Checkout <i class="fa fa-arrow-circle-right"></i
                   ></a>
                   <% } %>
                 </div>

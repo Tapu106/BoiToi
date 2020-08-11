@@ -3,7 +3,6 @@ const helpCart = require("../utils/manageCart");
 const { checkout } = require("../routes/shop");
 
 exports.getIndex = (req, res, next) => {
-  console.log(helpCart.cart);
   Product.find()
     .then((products) => {
       res.render("shop/index", {
@@ -36,8 +35,8 @@ exports.searchProduct = (req, res, next) => {
   try {
     Product.find({
       $or: [
-        { category: { $regex: req.query.dsearch } },
-        { name: { $regex: req.query.dsearch } },
+        { category: { $regex: req.query.q } },
+        { name: { $regex: req.query.q } },
       ],
     })
       .then((result) => {
