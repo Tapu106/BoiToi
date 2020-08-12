@@ -1,10 +1,10 @@
 const Product = require("../models/product");
 const helpCart = require("../utils/manageCart");
 const Order = require("../models/order");
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const PDFDocument = require('pdfkit');
+const PDFDocument = require("pdfkit");
 
 const stripe = require("stripe")(
   "sk_test_51GqeYUAabT662b5qChV5WnhO7oPA3hsx4ZkKagHbDuL04EfXEx6gXYqzBl99dOguoG4L6QpY7onMbG1DWXHxlf3u00AgbU2rCC"
@@ -21,7 +21,9 @@ exports.getIndex = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -35,31 +37,31 @@ exports.getProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
 exports.searchProduct = (req, res, next) => {
-  try {
-    Product.find({
-      $or: [
-        { category: { $regex: req.query.q } },
-        { name: { $regex: req.query.q } },
-      ],
-    })
-      .then((result) => {
-        console.log(result);
-        res.render("shop/search-result", {
-          pageTitle: "Search Results",
-          prods: result,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+  Product.find({
+    $or: [
+      { category: { $regex: req.query.q } },
+      { name: { $regex: req.query.q } },
+    ],
+  })
+    .then((result) => {
+      console.log(result);
+      res.render("shop/search-result", {
+        pageTitle: "Search Results",
+        prods: result,
       });
-  } catch (error) {
-    console.log(error);
-  }
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getCart = (req, res, next) => {
@@ -79,7 +81,9 @@ exports.getCart = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -95,7 +99,9 @@ exports.postCart = (req, res, next) => {
       res.redirect("/cart");
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -112,7 +118,9 @@ exports.postCartWithQty = (req, res, next) => {
       res.redirect("/cart");
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -125,7 +133,9 @@ exports.deleteCartItem = (req, res, next) => {
       res.redirect("/cart");
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -146,7 +156,9 @@ exports.getCheckout = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -160,7 +172,11 @@ exports.postWishlist = (req, res, next) => {
     .then((result) => {
       res.redirect("/");
     })
-    .catch((err) => {});
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.removeFromWhislist = (req, res, next) => {
@@ -172,7 +188,9 @@ exports.removeFromWhislist = (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -204,6 +222,11 @@ exports.postOrder = (req, res, next) => {
     })
     .then(() => {
       res.redirect("/cart");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -247,7 +270,9 @@ exports.postOrderStripe = (req, res, next) => {
       res.redirect("/orders");
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -262,7 +287,9 @@ exports.getOrder = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -298,7 +325,7 @@ exports.getInvoice = (req, res, next) => {
         pdfDoc
           .fontSize(14)
           .text(
-            prod.product.title +
+            prod.product.name +
               " - " +
               prod.quantity +
               " x " +
@@ -310,7 +337,10 @@ exports.getInvoice = (req, res, next) => {
       pdfDoc.fontSize(20).text("Total Price: $" + totalPrice);
 
       pdfDoc.end();
-      
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };

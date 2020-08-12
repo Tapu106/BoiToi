@@ -45,18 +45,10 @@ exports.postSignUp = (req, res, next) => {
   const mobile = req.body.mobile;
   const errors = validationResult(req);
 
-  // let cart;
-  // if (!req.session.isLoggedIn) {
-  //   cart = null;
-  // } else {
-  //   cart = req.user.cart;
-  // }
-
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
       pageTitle: "SignUp",
       errorMessage: errors.array()[0].msg,
-      // cart: cart,
       oldInput: {
         name: name,
         email: email,
@@ -98,12 +90,13 @@ exports.postSignUp = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
 exports.getlogin = (req, res, next) => {
-  
   let message = req.flash("error");
   if (message.length > 0) {
     message = message[0];
@@ -113,7 +106,6 @@ exports.getlogin = (req, res, next) => {
   res.render("auth/login", {
     errorMessage: message,
     pageTitle: "Login",
-   
   });
 };
 
@@ -134,38 +126,44 @@ exports.postLogin = (req, res, next) => {
     });
   }
 
-  User.findOne({ email: email }).then((userDoc) => {
-    if (!userDoc) {
-      return res.status(422).render("auth/login", {
-        errorMessage: "Invalid email or password.",
-        pageTitle: "Login",
-        oldInput: {
-          email: email,
-          password: password,
-          confirmPassword: req.body.confirmPassword,
-        },
-        validationErrors: errors.array(),
-      });
-    }
-    bcrypt
-      .compare(password, userDoc.password)
-      .then((doMatch) => {
-        if (doMatch) {
-          req.session.isLoggedIn = true;
-          req.session.user = userDoc;
-          return req.session.save((err) => {
-            console.log(err);
-            res.redirect("/");
-          });
-        }
-        req.flash("error", "Invalid email or password.");
-        res.redirect("/login");
-      })
-      .catch((err) => {
-        console.log(err);
-        res.redirect("/login");
-      });
-  });
+  User.findOne({ email: email })
+    .then((userDoc) => {
+      if (!userDoc) {
+        return res.status(422).render("auth/login", {
+          errorMessage: "Invalid email or password.",
+          pageTitle: "Login",
+          oldInput: {
+            email: email,
+            password: password,
+            confirmPassword: req.body.confirmPassword,
+          },
+          validationErrors: errors.array(),
+        });
+      }
+      bcrypt
+        .compare(password, userDoc.password)
+        .then((doMatch) => {
+          if (doMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = userDoc;
+            return req.session.save((err) => {
+              console.log(err);
+              res.redirect("/");
+            });
+          }
+          req.flash("error", "Invalid email or password.");
+          res.redirect("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/login");
+        });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getReset = (req, res, next) => {
@@ -220,7 +218,9 @@ exports.postReset = (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
       });
   });
 };
@@ -250,7 +250,9 @@ exports.getNewPassword = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -276,12 +278,11 @@ exports.postNewPassword = (req, res, next) => {
         })
         .then((result) => {
           res.redirect("/login");
-        })
-        .catch((err) => {
-          console.log(err);
         });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };

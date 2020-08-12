@@ -34,7 +34,15 @@ router.post(
   adminController.postEditProduct
 );
 
-router.post("/add-product", adminController.postAddProduct);
+router.post(
+  "/add-product",
+  [
+    body("name").isString().isLength({ min: 3 }).trim(),
+    body("price").isFloat(),
+    body("description").isLength({ min: 5, max: 400 }).trim(),
+  ],
+  adminController.postAddProduct
+);
 
 router.get("/products", isAuth, adminController.getProduct);
 

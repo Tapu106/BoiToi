@@ -11,6 +11,7 @@ const multer = require("multer");
 const URI = "mongodb+srv://Tapu:logoutyear@cluster0-jnxxe.mongodb.net/boitoi";
 const Product = require("./models/product");
 const isAuth = require("./middlewares/isAuth");
+const errorController = require("./controllers/error");
 const shopController = require("./controllers/shop");
 
 const port = 8000;
@@ -69,8 +70,12 @@ app.use(
   })
 );
 
-
 app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  next();
+});
 
 app.use((req, res, next) => {
   if (!req.session.user) {
@@ -78,17 +83,21 @@ app.use((req, res, next) => {
   }
   User.findById(req.session.user._id)
     .then((user) => {
+      if (!user) {
+        return next();
+      }
       req.user = user;
       next();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      next(new Error(err));
+    });
 });
 
 app.post("/create-order-stripe", isAuth, shopController.postOrderStripe);
 app.use(csrfProtection);
 
 app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   if (req.session.user) {
     res.locals.user = req.user;
@@ -101,6 +110,16 @@ app.use("/admin", adminRoute);
 app.use(shopRoute);
 app.use(authRoute);
 
+app.get("/500", errorController.get500);
+
+app.use(errorController.get404);
+
+app.use((error, req, res, next) => {
+  res.status(500).render("500", {
+    pageTitle: "Error!",
+    isAuthenticated: req.session.isLoggedIn,
+  });
+});
 mongoose
   .connect(URI)
   .then((result) => {

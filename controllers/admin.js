@@ -19,8 +19,9 @@ exports.postAddProduct = (req, res, next) => {
   const image = req.file;
 
   if (!image) {
-    return res.status(422).render("admin/add-product", {
+    return res.status(422).render("admin/edit-product", {
       pageTitle: "Add Product",
+      editing: false,
       product: {
         name: name,
         price: price,
@@ -34,8 +35,9 @@ exports.postAddProduct = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
-    return res.status(422).render("admin/add-product", {
+    return res.status(422).render("admin/edit-product", {
       pageTitle: "Add Product",
+      editing: false,
       product: {
         name: name,
         price: price,
@@ -64,7 +66,9 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -86,7 +90,9 @@ exports.getEditProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -137,7 +143,9 @@ exports.postEditProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -150,7 +158,9 @@ exports.getProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
