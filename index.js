@@ -10,6 +10,8 @@ const User = require("./models/user");
 const multer = require("multer");
 const URI = "mongodb+srv://Tapu:logoutyear@cluster0-jnxxe.mongodb.net/boitoi";
 const Product = require("./models/product");
+const isAuth = require("./middlewares/isAuth");
+const shopController = require("./controllers/shop");
 
 const port = 8000;
 
@@ -67,7 +69,7 @@ app.use(
   })
 );
 
-app.use(csrfProtection);
+
 app.use(flash());
 
 app.use((req, res, next) => {
@@ -81,6 +83,9 @@ app.use((req, res, next) => {
     })
     .catch((err) => console.log(err));
 });
+
+app.post("/create-order-stripe", isAuth, shopController.postOrderStripe);
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
@@ -99,12 +104,8 @@ app.use(authRoute);
 mongoose
   .connect(URI)
   .then((result) => {
-    const server = app.listen(port, () => {
+    app.listen(port, () => {
       console.log(`listening to server at port ${port}`);
-    });
-    const io = require("socket.io")(server);
-    io.on("connection", (socket) => {
-      console.log("client connected");
     });
   })
   .catch((err) => {

@@ -25,4 +25,10 @@ router.post("/remove-from-whishlist", shopController.removeFromWhislist);
 
 router.get("/checkout", isAuth, shopController.getCheckout);
 
+router.get("/create-order", shopController.postOrder);
+
+router.get("/orders", shopController.getOrder);
+
+router.get('/orders/:orderId', isAuth, shopController.getInvoice);
+
 module.exports = router;
