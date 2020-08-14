@@ -6,9 +6,7 @@ const path = require("path");
 
 const PDFDocument = require("pdfkit");
 
-const stripe = require("stripe")(
-  "sk_test_51GqeYUAabT662b5qChV5WnhO7oPA3hsx4ZkKagHbDuL04EfXEx6gXYqzBl99dOguoG4L6QpY7onMbG1DWXHxlf3u00AgbU2rCC"
-);
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 exports.getIndex = (req, res, next) => {
   Product.find()
@@ -51,7 +49,6 @@ exports.searchProduct = (req, res, next) => {
     ],
   })
     .then((result) => {
-      console.log(result);
       res.render("shop/search-result", {
         pageTitle: "Search Results",
         prods: result,
@@ -95,7 +92,6 @@ exports.postCart = (req, res, next) => {
       return req.user.addToCart(product);
     })
     .then((result) => {
-      console.log(result);
       res.redirect("/cart");
     })
     .catch((err) => {
@@ -114,7 +110,6 @@ exports.postCartWithQty = (req, res, next) => {
       return req.user.addToCartWithQty(product, quantity);
     })
     .then((result) => {
-      console.log(result);
       res.redirect("/cart");
     })
     .catch((err) => {
