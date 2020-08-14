@@ -171,4 +171,13 @@ userSchema.methods.clearCart = function () {
   return this.save();
 };
 
+userSchema.methods.clearWishList = function (prodId) {
+  const updatedItems = this.whishList.items.filter((i) => {
+    return i.productId.toString() !== prodId.toString();
+  });
+
+  this.whishList.items = updatedItems;
+  return this.save();
+};
+
 module.exports = mongoose.model("User", userSchema);

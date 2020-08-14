@@ -175,6 +175,9 @@ exports.deleteProduct = (req, res, next) => {
       filehelper.deleteFile(product.imageUrl);
       return Product.deleteOne({ _id: prodId, userId: req.user._id });
     })
+    .then((res) => {
+      return req.user.clearWishList(prodId);
+    })
     .then(() => {
       console.log("DESTROYED PRODUCT");
       res.status(200).json({ message: "Success!" });

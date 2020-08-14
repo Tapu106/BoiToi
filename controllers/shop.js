@@ -134,6 +134,21 @@ exports.deleteCartItem = (req, res, next) => {
     });
 };
 
+exports.deleteWishlisttItem = (req, res, next) => {
+  const prodId = req.body.productId;
+
+  req.user
+    .clearWishList(prodId)
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
 exports.getCheckout = (req, res, next) => {
   req.user
     .populate("cart.items.productId")

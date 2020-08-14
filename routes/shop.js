@@ -17,6 +17,8 @@ router.post("/cart", isAuth, shopController.postCart);
 
 router.post("/cart-delete-item", isAuth, shopController.deleteCartItem);
 
+router.post("/cart-wishlist-item", isAuth, shopController.deleteWishlisttItem);
+
 router.post("/add-cart-with-quantity", isAuth, shopController.postCartWithQty);
 
 router.post("/add-to-whishlist", isAuth, shopController.postWishlist);

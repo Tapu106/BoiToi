@@ -12,8 +12,8 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: "tapusust993@gmail.com",
-    pass: "01674631047",
+    user: "dasbabuoriginals@gmail.com",
+    pass: `${process.env.PASS}`,
   },
 });
 
@@ -74,7 +74,7 @@ exports.postSignUp = (req, res, next) => {
     .then((result) => {
       res.redirect("/login");
       const mailOptions = {
-        from: '"Tapu Das" tapusust993@gmail.com', // sender address
+        from: '"Dasbabu originals" dasbabuoriginals@gmail.com', // sender address
         to: email, // list of receivers
         subject: "Welcome to Boi-Toi!! ", // Subject line
         html: "<h1>You successfully signed up!</h1>", // html body
@@ -199,7 +199,7 @@ exports.postReset = (req, res, next) => {
       .then((result) => {
         res.redirect("/");
         const mailOptions = {
-          from: '"Tapu Das" tapusust993@gmail.com', // sender address
+          from: '"Dasbabu originals" dasbabuoriginals@gmail.com', // sender address
           to: req.body.email, // list of receivers
           subject: "Password reset ", // Subject line
           html: `
