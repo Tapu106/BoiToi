@@ -1,4 +1,10 @@
 node_modules
+<<<<<<< HEAD
 access.log
 nodemon.json
 data
+=======
+data
+access.log
+ndoemon.json
+>>>>>>> fixed
