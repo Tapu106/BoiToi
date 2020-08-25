@@ -60,7 +60,8 @@
                                                         <i class="fa fa-star"></i>
                                                     </div>
                                                     <div class="product-btns">
-                                                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                                                        <!-- <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button> -->
+                                                        <button class="quick-view" onclick="location.href = '/admin/edit-product/<%= product._id %>?edit=true'"><i class="fa fa-edit"></i><span class="tooltipp">edit</span></button>
                                                         <input type="hidden" value="<%= product._id %>" name="productId">
                                                         <input type="hidden" value="<%= csrfToken  %>" name="_csrf">
                                                         <button class="quick-view" onclick="location.href = '/products/<%= product._id %>'"><i class="fa fa-eye"></i><span class="tooltipp">view</span></button>

@@ -11,8 +11,12 @@
         <li><a href="#">Categories</a></li>
         <li><a href="/cart">Cart</a></li>
         <li><a href="/orders">Orders</a></li>
+        <% if (isAuthenticated) { %>
+        <% if(user.isAdmin === true) { %>
         <li><a href="/admin/add-product">Add Product</a></li>
         <li><a href="/admin/products">Admin Products</a></li>
+        <% } %>
+        <% } %>
       </ul>
       <!-- /NAV -->
     </div>

@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
+const { isAbsolute } = require("path");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -43,8 +44,12 @@ exports.postSignUp = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const mobile = req.body.mobile;
+  const isAdmin = req.body.isAdmin;
   const errors = validationResult(req);
-
+  let admin = false;
+  if (isAdmin === "1234") {
+    admin = true;
+  }
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
       pageTitle: "SignUp",
@@ -68,6 +73,7 @@ exports.postSignUp = (req, res, next) => {
         email: email,
         password: hashedPassword,
         Mobile_No: mobile,
+        isAdmin: admin,
       });
       return user.save();
     })

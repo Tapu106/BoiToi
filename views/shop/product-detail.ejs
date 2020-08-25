@@ -157,11 +157,11 @@
 									<% } else { %>
 										<%- include('../includes/add-to-wishlist.ejs',{product: prod}) %>
 									<% } %>	</li>
-									<% if (isAuthenticated) { %> 
-									<% if(prod.userId.toString() === user._id.toString()) {  %>
-								<li><a href="/admin/edit-product/<%= prod._id %>?edit=true"><i class="fa fa-exchange"></i> edit</a></li>
-								<% } %>
-								<% } %>
+									<!-- <% if (isAuthenticated) { %> 
+									
+								<!-- <li><a href="/admin/edit-product/<%= prod._id %>?edit=true"><i class="fa fa-exchange"></i> edit</a></li> -->
+								
+								<% } %> -->
 							</ul>
 
 							<ul class="product-links">
