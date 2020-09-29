@@ -2,21 +2,32 @@ const User = require("../models/user");
 
 const nodemailer = require("nodemailer");
 
+const sparkPostTransport = require("nodemailer-sparkpost-transport");
+
 const bcrypt = require("bcryptjs");
 
 const { validationResult } = require("express-validator");
 const crypto = require("crypto");
 const { isAbsolute } = require("path");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "dasbabuoriginals@gmail.com",
-    pass: `${process.env.PASS}`,
-  },
-});
+const SparkPost = require("sparkpost");
+const client = new SparkPost("730cb909d8c95861b463bc2faf3c8932db9bb253");
+
+// const transporter = nodemailer.createTransport({
+//   host: "smtp.gmail.com",
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: "dasbabuoriginals@gmail.com",
+//     pass: `${process.env.PASS}`,
+//   },
+// });
+
+// const transporter = nodemailer.createTransport(
+//   sparkPostTransport({
+//     sparkPostApiKey: ,
+//   })
+// );
 
 exports.getSignup = (req, res, next) => {
   let message = req.flash("error");
@@ -79,21 +90,41 @@ exports.postSignUp = (req, res, next) => {
     })
     .then((result) => {
       res.redirect("/login");
-      const mailOptions = {
-        from: '"Dasbabu originals" dasbabuoriginals@gmail.com', // sender address
-        to: email, // list of receivers
-        subject: "Welcome to Boi-Toi!! ", // Subject line
-        html: "<h1>You successfully signed up!</h1>", // html body
-      };
-      return transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          // res.status(400).send({success: false})
-        } else {
-          // res.status(200).send({success: true});
-          console.log(info);
-        }
-      });
+      // const mailOptions = {
+      //   from: '"Dasbabu originals" dasbabuoriginals@gmail.com', // sender address
+      //   to: email, // list of receivers
+      //   subject: "Welcome to Boi-Toi!! ", // Subject line
+      //   html: "<h1>You successfully signed up!</h1>", // html body
+      // };
+      // return transporter.sendMail(mailOptions, (error, info) => {
+      //   if (error) {
+      //     console.log(error);
+      //     // res.status(400).send({success: false})
+      //   } else {
+      //     // res.status(200).send({success: true});
+      //     console.log(info);
+      //   }
+      // });
+      client.transmissions
+        .send({
+          options: {
+            sandbox: true,
+          },
+          content: {
+            from: "testing@sparkpostbox.com",
+            subject: "Welcome to Boi-Toi!! ",
+            html: "<h1>You successfully signed up!</h1>",
+          },
+          recipients: [{ address: email }],
+        })
+        .then((data) => {
+          console.log("Woohoo! You just sent your mailing!");
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log("Whoops! Something went wrong");
+          console.log(err);
+        });
     })
     .catch((err) => {
       const error = new Error(err);
