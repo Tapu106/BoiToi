@@ -23,6 +23,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
+  uploadTime: String,
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",

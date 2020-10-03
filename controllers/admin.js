@@ -1,6 +1,7 @@
 const Product = require("../models/product");
 const filehelper = require("../utils/file");
 const { validationResult } = require("express-validator/check");
+const moment = require("moment");
 
 exports.getAddproducts = (req, res, next) => {
   res.render("admin/edit-product", {
@@ -13,17 +14,19 @@ exports.getAddproducts = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const name = req.body.name;
+  const updatedName = name.toLowerCase();
   const category = req.body.category;
   const price = req.body.price;
   const description = req.body.description;
   const image = req.file;
+  const uploadedDate = moment().format("LLL");
 
   if (!image) {
     return res.status(422).render("admin/edit-product", {
       pageTitle: "Add Product",
       editing: false,
       product: {
-        name: name,
+        name: updatedName,
         price: price,
         description: description,
       },
@@ -39,7 +42,7 @@ exports.postAddProduct = (req, res, next) => {
       pageTitle: "Add Product",
       editing: false,
       product: {
-        name: name,
+        name: updatedName,
         price: price,
         description: description,
       },
@@ -51,11 +54,12 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = image.path;
 
   const product = new Product({
-    name: name,
+    name: updatedName,
     price: price,
     category: category,
     description: description,
     imageUrl: imageUrl,
+    uploadTime: uploadedDate,
     userId: req.user,
   });
   product

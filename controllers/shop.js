@@ -4,6 +4,8 @@ const Order = require("../models/order");
 const fs = require("fs");
 const path = require("path");
 
+const moment = require("moment");
+
 const PDFDocument = require("pdfkit");
 
 const stripe = require("stripe")(process.env.STRIPE_KEY);
@@ -42,10 +44,13 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.searchProduct = (req, res, next) => {
+  const searchedProduct = req.query.q;
+  const finalQuery = searchedProduct.toLowerCase();
+
   Product.find({
     $or: [
-      { category: { $regex: req.query.q } },
-      { name: { $regex: req.query.q } },
+      { category: { $regex: finalQuery } },
+      { name: { $regex: finalQuery } },
     ],
   })
     .then((result) => {
@@ -224,6 +229,7 @@ exports.postOrder = (req, res, next) => {
           email: req.user.email,
           userId: req.user,
         },
+        orderTime: moment().format("LLL"),
       });
       return order.save();
     })
@@ -241,9 +247,7 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.postOrderStripe = (req, res, next) => {
-  // Token is created using Checkout or Elements!
-  // Get the payment token ID submitted by the form:
-  const token = req.body.stripeToken; // Using Express
+  const token = req.body.stripeToken;
   let totalSum = 0;
 
   req.user
@@ -263,6 +267,7 @@ exports.postOrderStripe = (req, res, next) => {
           userId: req.user,
         },
         products: products,
+        orderTime: moment().format("LLL"),
       });
       return order.save();
     })
