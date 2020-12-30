@@ -296,7 +296,7 @@ exports.getOrder = (req, res, next) => {
     .then((orders) => {
       let total = 0;
 
-      res.render("shop/order", {
+      res.render("shop/order1", {
         pageTitle: "Orders",
         orders: orders,
       });
@@ -357,5 +357,28 @@ exports.getInvoice = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
+    });
+};
+
+exports.reviewProduct = (req, res, next) => {
+  const userName = req.body.name;
+  const userEmail = req.body.email;
+  const userReview = req.body.product_review;
+  const prodId = req.body.productId;
+
+  Product.findById(prodId)
+    .then((product) => {
+      product.reviews.push({
+        name: userName,
+        email: userEmail,
+        review: userReview,
+      });
+      return product.save();
+    })
+    .then((result) => {
+      res.redirect("back");
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };

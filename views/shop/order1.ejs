@@ -1,0 +1,50 @@
+<%- include('../includes/head.ejs') %> <%- include('../includes/header.ejs') %>
+<%- include('../includes/navigation.ejs') %>
+
+<style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 5px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+</style>
+
+<main style="margin-left: auto; margin-right: auto">
+  <h2>Order Status</h2>
+
+  <% if (orders.length <= 0) { %>
+  <h1>Nothing there!</h1>
+  <% } else { %>
+
+  <table>
+    <tr>
+      <th>Order Id</th>
+      <th>Product Name</th>
+      <th>Invoice</th>
+      <th>Status</th>
+    </tr>
+    <% orders.forEach(order => { %>
+    <tr>
+      <td><%= order._id %></td>
+      <td><%= order.user.email %></td>
+      <td><a href="/orders/<%= order._id %>">Download</a></td>
+      <td></td>
+    </tr>
+
+    <% }); %>
+  </table>
+  <% } %>
+</main>
+
+<%- include('../includes/end.ejs') %>

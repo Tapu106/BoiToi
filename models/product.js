@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const moment = require("moment");
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
@@ -29,6 +29,26 @@ const productSchema = new Schema({
     ref: "User",
     required: true,
   },
+  reviews: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      review: {
+        type: String,
+        required: true,
+      },
+      uploadTime: {
+        type: String,
+        default: () => moment().format("M/d/YYYY, h:mm a"),
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Product", productSchema);

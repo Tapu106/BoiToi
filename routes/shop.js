@@ -2,7 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 
+const { body } = require("express-validator/check");
+
 const shopController = require("../controllers/shop");
+
 const isAuth = require("../middlewares/isAuth");
 
 router.get("/", shopController.getIndex);
@@ -31,6 +34,13 @@ router.get("/create-order", isAuth, shopController.postOrder);
 
 router.get("/orders", isAuth, shopController.getOrder);
 
-router.get('/orders/:orderId', isAuth, shopController.getInvoice);
+router.get("/orders/:orderId", isAuth, shopController.getInvoice);
+
+router.post(
+  "/review-product",
+  [body("product-review").isLength({ min: 5, max: 400 }).trim()],
+  isAuth,
+  shopController.reviewProduct
+);
 
 module.exports = router;

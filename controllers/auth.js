@@ -37,7 +37,7 @@ exports.getSignup = (req, res, next) => {
     message = null;
   }
   res.render("auth/signup", {
-    pageTitle: "SignUp",
+    pageTitle: "BoiToi | SignUp",
     errorMessage: message,
     oldInput: {
       name: "",
@@ -63,7 +63,7 @@ exports.postSignUp = (req, res, next) => {
   }
   if (!errors.isEmpty()) {
     return res.status(422).render("auth/signup", {
-      pageTitle: "SignUp",
+      pageTitle: "BoiToi | SignUp",
       errorMessage: errors.array()[0].msg,
       oldInput: {
         name: name,
@@ -142,7 +142,7 @@ exports.getlogin = (req, res, next) => {
   }
   res.render("auth/login", {
     errorMessage: message,
-    pageTitle: "Login",
+    pageTitle: "BoiToi | Login",
   });
 };
 
