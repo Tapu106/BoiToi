@@ -364,16 +364,31 @@ exports.reviewProduct = (req, res, next) => {
   const userName = req.body.name;
   const userEmail = req.body.email;
   const userReview = req.body.product_review;
+  const starReview = parseInt(req.body.rating, 10);
   const prodId = req.body.productId;
+  console.log(typeof starReview);
 
-  Product.findById(prodId)
+  Product.findById(req.body.productId)
     .then((product) => {
-      product.reviews.push({
-        name: userName,
-        email: userEmail,
-        review: userReview,
-      });
-      return product.save();
+      req.product = product;
+      // console.log(req.product);
+      // product.reviews.push({
+      //   name: userName,
+      //   email: userEmail,
+      //   review: userReview,
+      //   rating: starReview,
+      // });
+      // return product.save().then((product) => {
+      //   console.log(product);
+      //   return prod.ratingStarFull(product, starReview);
+      // });
+      return req.product.ratingStarFull(
+        product,
+        userName,
+        userEmail,
+        userReview,
+        starReview
+      );
     })
     .then((result) => {
       res.redirect("back");

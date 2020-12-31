@@ -222,14 +222,21 @@
 										<div class="col-md-3">
 											<div id="rating">
 												<div class="rating-avg">
-													<span>4.5</span>
+													<% avgRating = (prod.ratingSum/prod.reviews.length) %>
+													<% intAvgRating = Math.floor(avgRating) %>
+													<span><%= avgRating %></span>
 													<div class="rating-stars">
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star-o"></i>
+														<% const noStar = 5 - intAvgRating %>
+																	<% for(x=0;x < intAvgRating;x++) { %>
+																		<i class="fa fa-star"></i>
+																	<% } %>
+																	<% if(noStar > 0) { %>
+																		<% for(x=0;x < noStar;x++) { %>
+																			<i class="fa fa-star-o empty"></i>
+																		<% } %>
+																	<% } %>
 													</div>
+													
 												</div>
 												<ul class="rating">
 													<li>
@@ -243,7 +250,7 @@
 														<div class="rating-progress">
 															<div style="width: 80%;"></div>
 														</div>
-														<span class="sum">3</span>
+														<span class="sum"><%= prod.rating_five %></span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -256,7 +263,7 @@
 														<div class="rating-progress">
 															<div style="width: 60%;"></div>
 														</div>
-														<span class="sum">2</span>
+														<span class="sum"><%= prod.rating_four %></span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -269,7 +276,7 @@
 														<div class="rating-progress">
 															<div></div>
 														</div>
-														<span class="sum">0</span>
+														<span class="sum"><%= prod.rating_three %></span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -282,7 +289,7 @@
 														<div class="rating-progress">
 															<div></div>
 														</div>
-														<span class="sum">0</span>
+														<span class="sum"><%= prod.rating_two %></span>
 													</li>
 													<li>
 														<div class="rating-stars">
@@ -295,7 +302,7 @@
 														<div class="rating-progress">
 															<div></div>
 														</div>
-														<span class="sum">0</span>
+														<span class="sum"><%= prod.rating_one %></span>
 													</li>
 												</ul>
 											</div>
@@ -312,13 +319,23 @@
 															<div class="review-heading">
 																<h5 class="name"><%=prodItem.name%></h5>
 																<p class="date"><%= prodItem.uploadTime%></p>
-																<!-- <div class="review-rating">
+																<div class="review-rating">
+																	<% const noStar = 5 - prodItem.rating %>
+																	<% for(x=0;x < prodItem.rating;x++) { %>
+																		<i class="fa fa-star"></i>
+																	<% } %>
+																	<% if(noStar > 0) { %>
+																		<% for(x=0;x < noStar;x++) { %>
+																			<i class="fa fa-star-o empty"></i>
+																		<% } %>
+																	<% } %>
+
+																	
+																	<!-- <i class="fa fa-star"></i>
 																	<i class="fa fa-star"></i>
 																	<i class="fa fa-star"></i>
-																	<i class="fa fa-star"></i>
-																	<i class="fa fa-star"></i>
-																	<i class="fa fa-star-o empty"></i>
-																</div> -->
+																	<i class="fa fa-star-o empty"></i> -->
+																</div>
 															</div>
 															<div class="review-body">
 																<p style=" border: 1px solid;
@@ -352,10 +369,10 @@
 										<div class="col-md-3">
 											<div id="review-form">
 												<form class="review-form" method="POST" action="/review-product" >
-													<input class="input" type="text" name='name' value="<%= user.name %>">
-													<input class="input" type="email" name="email" value="<%= user.email %>">
+													<input class="input" type="text" name='name' value="<%= user.name %>" readonly>
+													<input class="input" type="email" name="email" value="<%= user.email %>" readonly>
 													<textarea class="input" name="product_review" placeholder="Your Review"></textarea>
-													<!-- <div class="input-rating">
+													<div class="input-rating">
 														<span>Your Rating: </span>
 														<div class="stars">
 															<input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
@@ -364,7 +381,7 @@
 															<input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
 															<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
 														</div>
-													</div> -->
+													</div>
 													<input type="hidden" value="<%= prod._id %>" name="productId">
 													<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 													<button type="submit" class="primary-btn">Submit</button>

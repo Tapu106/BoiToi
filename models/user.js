@@ -75,6 +75,7 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.addToCart = function (product) {
+  console.log("cart this ", this);
   const CartProdIndex = this.cart.items.findIndex((cp) => {
     return cp.productId.toString() === product._id.toString();
   });
@@ -144,6 +145,7 @@ userSchema.methods.removeItemFromCart = function (productId) {
 };
 
 userSchema.methods.addToWishlist = function (product) {
+  console.log("what ", this);
   const updatedItems = [...this.whishList.items];
 
   updatedItems.push({
