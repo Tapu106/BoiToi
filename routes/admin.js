@@ -44,6 +44,15 @@ router.post(
   adminController.postAddProduct
 );
 
+router.get("/add-category", isAuth, adminController.getAddCategory);
+
+router.post(
+  "/add-category",
+  [body("name").isString().isAlpha().isLength({ min: 3 }).trim()],
+  isAuth,
+  adminController.postAddCategory
+);
+
 router.get("/products", isAuth, adminController.getProduct);
 
 router.delete("/product/:productId", adminController.deleteProduct);

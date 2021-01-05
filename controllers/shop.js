@@ -3,12 +3,16 @@ const helpCart = require("../utils/manageCart");
 const Order = require("../models/order");
 const fs = require("fs");
 const path = require("path");
+const mongoose = require("mongoose");
 
 const moment = require("moment");
 
 const PDFDocument = require("pdfkit");
 
 const stripe = require("stripe")(process.env.STRIPE_KEY);
+
+
+/* -------------------- Home Page ------------------------ */
 
 exports.getIndex = (req, res, next) => {
   Product.find()
@@ -28,7 +32,9 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getProduct = (req, res, next) => {
-  const prodId = req.params.productId;
+  const stringProdId = req.params.productId;
+  const prodId = mongoose.Types.ObjectId(stringProdId);
+  console.log(typeof prodId);
   Product.findById(prodId)
     .then((product) => {
       res.render("shop/product-detail", {
@@ -40,8 +46,11 @@ exports.getProduct = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
+      // console.log(err);
     });
 };
+
+/* --------------------- Search Product ---------------------- */
 
 exports.searchProduct = (req, res, next) => {
   const searchedProduct = req.query.q;
@@ -65,6 +74,8 @@ exports.searchProduct = (req, res, next) => {
       return next(error);
     });
 };
+
+/* ---------- Cart Controller ---------------  */
 
 exports.getCart = (req, res, next) => {
   req.user
@@ -139,43 +150,7 @@ exports.deleteCartItem = (req, res, next) => {
     });
 };
 
-exports.deleteWishlisttItem = (req, res, next) => {
-  const prodId = req.body.productId;
-
-  req.user
-    .clearWishList(prodId)
-    .then((result) => {
-      res.redirect("/");
-    })
-    .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
-};
-
-exports.getCheckout = (req, res, next) => {
-  req.user
-    .populate("cart.items.productId")
-    .execPopulate()
-    .then((user) => {
-      const products = user.cart.items;
-      let total = 0;
-      products.forEach((p) => {
-        total += p.quantity * p.productId.price;
-      });
-      res.render("shop/checkout", {
-        pageTitle: "checkout",
-        product: products,
-        sum: total,
-      });
-    })
-    .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
-};
+/* ------ Wishlist Controller ----------- */
 
 exports.postWishlist = (req, res, next) => {
   const prodId = req.body.productId;
@@ -208,6 +183,50 @@ exports.removeFromWhislist = (req, res, next) => {
       return next(error);
     });
 };
+
+exports.deleteWishlisttItem = (req, res, next) => {
+  const prodId = req.body.productId;
+
+  req.user
+    .clearWishList(prodId)
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
+
+/* ----------------Checkout Controller---------------*/
+
+exports.getCheckout = (req, res, next) => {
+  req.user
+    .populate("cart.items.productId")
+    .execPopulate()
+    .then((user) => {
+      const products = user.cart.items;
+      let total = 0;
+      products.forEach((p) => {
+        total += p.quantity * p.productId.price;
+      });
+      res.render("shop/checkout", {
+        pageTitle: "checkout",
+        product: products,
+        sum: total,
+      });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
+
+/* -------------- Order Controller --------------*/
 
 exports.postOrder = (req, res, next) => {
   let total = 0;
@@ -359,6 +378,9 @@ exports.getInvoice = (req, res, next) => {
       return next(error);
     });
 };
+
+
+/* -------------------- Review Controller --------------- */
 
 exports.reviewProduct = (req, res, next) => {
   const userName = req.body.name;

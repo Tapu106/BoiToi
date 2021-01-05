@@ -1,15 +1,58 @@
 const Product = require("../models/product");
 const filehelper = require("../utils/file");
 const { validationResult } = require("express-validator/check");
+const Category = require("../models/category");
 const moment = require("moment");
 
-exports.getAddproducts = (req, res, next) => {
-  res.render("admin/edit-product", {
-    pageTitle: "Add Product",
-    editing: false,
+exports.getAddCategory = (req, res, next) => {
+  res.render("admin/add-category", {
+    pageTitle: " BoiToi | Add Category",
     errorMessage: null,
     validationErrors: [],
   });
+};
+
+exports.postAddCategory = (req, res, next) => {
+  const name = req.body.name;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render("admin/add-category", {
+      pageTitle: "Add Product",
+      errorMessage: errors.array()[0].msg,
+      validationErrors: errors.array(),
+    });
+  }
+
+  const category = new Category({
+    name: name,
+  });
+  category
+    .save()
+    .then((resu) => {
+      console.log(resu);
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.getAddproducts = (req, res, next) => {
+  Category.find()
+    .then((categories) => {
+      res.render("admin/edit-product", {
+        pageTitle: "Add Product",
+        editing: false,
+        errorMessage: null,
+        categories: categories,
+        validationErrors: [],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -67,7 +110,15 @@ exports.postAddProduct = (req, res, next) => {
     .then((result) => {
       console.log(result);
       console.log("Created Product");
-      res.redirect("/");
+      console.log("unpou", category);
+      return Category.findOne({ name: category }).then((cat) => {
+        console.log("res", result);
+        console.log("categor", cat);
+        cat.products.push({ Product: result });
+        return cat.save().then((ree) => {
+          res.redirect("/");
+        });
+      });
     })
     .catch((err) => {
       const error = new Error(err);

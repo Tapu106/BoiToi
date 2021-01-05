@@ -62,7 +62,7 @@
 					<!-- /Product main img -->
 
 					<!-- Product thumb imgs -->
-					<div class="col-md-2  col-md-pull-5">
+					<div class="col-md-2  col-md-pull-5" style="visibility: hidden;">
 						<div id="product-imgs">
 							<div class="product-preview">
 								<img src="../img/product01.png" alt="">
@@ -308,69 +308,72 @@
 											</div>
 										</div>
 										<!-- /Rating -->
-
+										
 										<!-- Reviews -->
 										<div class="col-md-6">
 											<div id="reviews">
 												<ul class="reviews">
-												<% if(prod.reviews.length > 0) { %>
-												<%	prod.reviews.forEach(prodItem=>{ %>
-														<li>
-															<div class="review-heading">
-																<h5 class="name"><%=prodItem.name%></h5>
-																<p class="date"><%= prodItem.uploadTime%></p>
-																<div class="review-rating">
-																	<% const noStar = 5 - prodItem.rating %>
-																	<% for(x=0;x < prodItem.rating;x++) { %>
-																		<i class="fa fa-star"></i>
-																	<% } %>
-																	<% if(noStar > 0) { %>
-																		<% for(x=0;x < noStar;x++) { %>
-																			<i class="fa fa-star-o empty"></i>
-																		<% } %>
-																	<% } %>
-
-																	
-																	<!-- <i class="fa fa-star"></i>
-																	<i class="fa fa-star"></i>
-																	<i class="fa fa-star"></i>
-																	<i class="fa fa-star-o empty"></i> -->
-																</div>
-															</div>
-															<div class="review-body">
-																<p style=" border: 1px solid;
+													<% if(prod.reviews.length > 0) { %>
+														<%	prod.reviews.forEach(prodItem=>{ %>
+															<li>
+																<div class="review-heading">
+																	<h5 class="name"><%=prodItem.name%></h5>
+																	<p class="date"><%= prodItem.uploadTime%></p>
+																	<div class="review-rating">
+																		<% const noStar = 5 - prodItem.rating %>
+																		<% for(x=0;x < prodItem.rating;x++) { %>
+																			<i class="fa fa-star"aria-hidden="true"></i>
+																			<% } %>
+																			<% if(noStar > 0) { %>
+																				<% for(x=0;x < noStar;x++) { %>
+																					<i class="fa fa-star-o empty"></i>
+																					<% } %>
+																					<% } %>
+																					
+																					
+																					<!-- <i class="fa fa-star"></i>
+																						<i class="fa fa-star"></i>
+																						<i class="fa fa-star"></i>
+																						<i class="fa fa-star-o empty"></i> -->
+																					</div>
+																				</div>
+																				<div class="review-body">
+																					<p style=" border: 1px solid;
 																padding: 10px;
 																box-shadow: 5px 10px 18px rgb(17, 68, 122);
 																outline: none;"><%= prodItem.review %></p>
 															</div>
 														</li>
-												<%	}) %>
-													
-													
-
-												<%	} else { %>
-														<p style="font-weight: bold; font-size: large;">No Reviews So Far!!</p>
-												<%	} %>
-										
-												</ul>
-												<ul class="reviews-pagination">
-													<li class="active">1</li>
-													<li><a href="#">2</a></li>
-													<li><a href="#">3</a></li>
-													<li><a href="#">4</a></li>
+														<%	}) %>
+														
+														
+														
+														<%	} else { %>
+															<p style="font-weight: bold; font-size: large;">No Reviews So Far!!</p>
+															<%	} %>
+															
+														</ul>
+														<ul class="reviews-pagination">
+															<li ><a href="<%= url %>?page=1">1</a></li>
+															<li><a href="<%= url %>?page=2">2</a></li>
+															<li><a href="<%= url %>?page=3">3</a></li>
+															<li><a href="<%= url %>?page=4">4</a></li>
 													<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
 												</ul>
 												
 											</div>
 										</div>
 										<!-- /Reviews -->
-
+										
 										<!-- Review Form -->
+										<% if(isAuthenticated) { %>
 										<div class="col-md-3">
 											<div id="review-form">
 												<form class="review-form" method="POST" action="/review-product" >
-													<input class="input" type="text" name='name' value="<%= user.name %>" readonly>
-													<input class="input" type="email" name="email" value="<%= user.email %>" readonly>
+													
+													<input class="input" type="text" name='name' value="<% if(isAuthenticated){ %> <%= user.name %> <% }%> " readonly>
+													<input class="input" type="email" name="email" value="<% if(isAuthenticated){ %> <%= user.email %> <% }%> " readonly>
+													
 													<textarea class="input" name="product_review" placeholder="Your Review"></textarea>
 													<div class="input-rating">
 														<span>Your Rating: </span>
@@ -382,12 +385,35 @@
 															<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
 														</div>
 													</div>
-													<input type="hidden" value="<%= prod._id %>" name="productId">
+													<input type="hidden" value="<%= prod._id %>" name="productId"/>
 													<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 													<button type="submit" class="primary-btn">Submit</button>
 												</form>
 											</div>
+											
 										</div>
+										<% } else { %>
+											<div class="col-md-3">
+												<div id="review-form">
+													<form class="review-form">
+														<input class="input" type="text" placeholder="Your Name">
+														<input class="input" type="email" placeholder="Your Email">
+														<textarea class="input" placeholder="Your Review"></textarea>
+														<div class="input-rating">
+															<span>Your Rating: </span>
+															<div class="stars">
+																<input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
+																<input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
+																<input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
+																<input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
+																<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
+															</div>
+														</div>
+														<button class="primary-btn">Submit</button>
+													</form>
+												</div>
+											</div>
+											<% } %>
 										<!-- /Review Form -->
 									</div>
 								</div>

@@ -30,7 +30,8 @@
   <table>
     <tr>
       <th>Order Id</th>
-      <th>Product Name</th>
+      <th>User Email</th>
+      <th>Order Time</th>
       <th>Invoice</th>
       <th>Status</th>
     </tr>
@@ -38,6 +39,7 @@
     <tr>
       <td><%= order._id %></td>
       <td><%= order.user.email %></td>
+      <td><%= order.orderTime %></td>
       <td><a href="/orders/<%= order._id %>">Download</a></td>
       <td></td>
     </tr>

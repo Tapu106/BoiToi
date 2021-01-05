@@ -104,9 +104,10 @@
             "
           >
             <option>Choose a category</option>
-            <option value="Novel">Novel</option>
-            <option value="Science Fiction">Science Fiction</option>
-            <option value="Kids Section">Kids Section</option>
+            <% for(let category of categories) { %>
+            <option value="<%= category.name %>"><%= category.name %></option>
+            <% } %>
+            
           </select>
         </div>
         <div class="forms-control">

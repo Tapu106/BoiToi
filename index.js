@@ -90,6 +90,9 @@ app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.url = req.originalUrl;
+  res.locals.host = req.get("host");
+  res.locals.protocol = req.protocol;
   next();
 });
 

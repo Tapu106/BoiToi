@@ -22,7 +22,7 @@
 								<img src="./img/shop01.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Laptop<br>Collection</h3>
+								<h3>BCS<br>Collection</h3>
 								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -50,7 +50,7 @@
 								<img src="./img/shop02.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Cameras<br>Collection</h3>
+								<h3>Admission Guide<br>Collection</h3>
 								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -109,11 +109,17 @@
 													<h3 class="product-name"><a href="#"><%= product.name %></a></h3>
 													<h4 class="product-price"><%= product.price %>TK<del class="product-old-price"></del></h4>
 													<div class="product-rating">
+													<% avgRating = (product.ratingSum/product.reviews.length) %>
+													<% intAvgRating = Math.floor(avgRating) %>
+													<% const noStar = 5 - intAvgRating %>
+													<% for(x=0;x < intAvgRating;x++) { %>
 														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
+													<% } %>
+													<% if(noStar > 0) { %>
+														<% for(x=0;x < noStar;x++) { %>
+															<i class="fa fa-star-o empty"></i>
+														<% } %>
+													<% } %>
 													</div>
 													<div class="product-btns">
 														<% let found = false %>	
