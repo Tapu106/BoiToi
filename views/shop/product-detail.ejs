@@ -222,7 +222,8 @@
 										<div class="col-md-3">
 											<div id="rating">
 												<div class="rating-avg">
-													<% avgRating = (prod.ratingSum/prod.reviews.length) %>
+													
+ 													<% avgRating = prod.ratingSum > 0 ?(prod.ratingSum/prod.reviews.length) : 0 %>
 													<% intAvgRating = Math.floor(avgRating) %>
 													<span><%= avgRating %></span>
 													<div class="rating-stars">
@@ -235,6 +236,7 @@
 																			<i class="fa fa-star-o empty"></i>
 																		<% } %>
 																	<% } %>
+																	
 													</div>
 													
 												</div>
